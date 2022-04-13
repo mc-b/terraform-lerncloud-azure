@@ -1,13 +1,6 @@
-provider "azurerm" {
-  features {}
-}
-
-# Ressource Gruppe
-
-resource "azurerm_resource_group" "lerncloud" {
-  name     = var.module
-  location = var.location
-}
+###
+#   Ressourcen
+#
 
 # Netzwerk
 
