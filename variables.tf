@@ -19,12 +19,8 @@ variable "userdata" {
 }
 
 variable "ports" {
-    type    = map
-    default = {
-        100 = 22,
-        200 = 80,
-        300 = 443
-    }        
+    type    = list(number)
+    default = [ 22, 80 ]
 }
 
 variable "port_priority" {
