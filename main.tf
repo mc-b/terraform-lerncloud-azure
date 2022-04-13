@@ -50,28 +50,44 @@ resource "azurerm_network_security_group" "lerncloud" {
   name                = "${var.module}-nsg"
   location            = azurerm_resource_group.lerncloud.location
   resource_group_name = azurerm_resource_group.lerncloud.name
+  
+  dynamic "security_rule" {
+    for_each = var.ports 
+      content {
+            access                     = "Allow"
+            direction                  = "Inbound"
+            name                       = "port-${security_rule.value}"
+            priority                   = security_rule.key
+            protocol                   = "Tcp"
+            source_port_range          = "*"
+            source_address_prefix      = "*"
+            destination_port_range     = "${security_rule.value}"
+            destination_address_prefix = "*"
+      } 
+  }
+  
   security_rule {
     access                     = "Allow"
     direction                  = "Inbound"
-    name                       = "http"
-    priority                   = 100
+    name                       = "alltcp"
+    priority                   = 2000
     protocol                   = "Tcp"
     source_port_range          = "*"
-    source_address_prefix      = "*"
-    destination_port_range     = "80"
+    source_address_prefix      = "${chomp(data.http.myip.body)}/32"
+    destination_port_range     = "22-65535"
     destination_address_prefix = "*"
   }
   security_rule {
     access                     = "Allow"
     direction                  = "Inbound"
-    name                       = "ssh"
-    priority                   = 200
-    protocol                   = "Tcp"
+    name                       = "allucp"
+    priority                   = 2100
+    protocol                   = "Udp"
     source_port_range          = "*"
-    source_address_prefix      = "*"
-    destination_port_range     = "22"
+    source_address_prefix      = "${chomp(data.http.myip.body)}/32"
+    destination_port_range     = "22-65535"
     destination_address_prefix = "*"
-  }  
+  }   
 }
 
 resource "azurerm_network_interface_security_group_association" "lerncloud" {
