@@ -1,7 +1,0 @@
-###
-#   Provider 
-#
-
-provider "azurerm" {
-  features {}
-}
