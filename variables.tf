@@ -23,8 +23,24 @@ variable "ports" {
     default = [ 22, 80 ]
 }
 
-variable "port_priority" {
-    default = 100
+# Ports um "priority" Ergaenzen
+locals {
+  expanded_ports = [
+    for portmap, count in var.ports : {
+        priority = portmap + 100
+        port     = tostring(count)
+      }
+  ]
+}
+
+# Ports um "priority" Ergaenzen
+locals {
+  expanded_ports_udp = [
+    for portmap, count in var.ports : {
+        priority = portmap + 200
+        port     = tostring(count)
+      }
+  ]
 }
 
 variable "mem" {

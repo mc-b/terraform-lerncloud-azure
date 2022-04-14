@@ -51,34 +51,40 @@ resource "azurerm_network_security_group" "lerncloud" {
   location            = azurerm_resource_group.lerncloud.location
   resource_group_name = azurerm_resource_group.lerncloud.name
   
-  security_rule {
-    access                     = "Allow"
-    direction                  = "Inbound"
-    name                       = "http"
-    priority                   = 100
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    source_address_prefix      = "*"
-    destination_port_range     = "80"
-    destination_address_prefix = "*"
+  dynamic "security_rule" {
+    for_each = local.expanded_ports 
+      content {
+            access                     = "Allow"
+            direction                  = "Inbound"
+            name                       = "port-${lookup(security_rule.value, "port")}"
+            priority                   = lookup( security_rule.value, "priority" )
+            protocol                   = "Tcp"
+            source_port_range          = "*"
+            source_address_prefix      = "*"
+            destination_port_range     = "${lookup(security_rule.value, "port")}"
+            destination_address_prefix = "*"
+      } 
   }
-  security_rule {
-    access                     = "Allow"
-    direction                  = "Inbound"
-    name                       = "ssh"
-    priority                   = 200
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    source_address_prefix      = "*"
-    destination_port_range     = "22"
-    destination_address_prefix = "*"
-  } 
+  dynamic "security_rule" {
+    for_each = local.expanded_ports_udp 
+      content {
+            access                     = "Allow"
+            direction                  = "Inbound"
+            name                       = "port-${lookup(security_rule.value, "port")}-udp"
+            priority                   = lookup( security_rule.value, "priority" )
+            protocol                   = "Udp"
+            source_port_range          = "*"
+            source_address_prefix      = "*"
+            destination_port_range     = "${lookup(security_rule.value, "port")}"
+            destination_address_prefix = "*"
+      } 
+  }  
   
   security_rule {
     access                     = "Allow"
     direction                  = "Inbound"
     name                       = "alltcp"
-    priority                   = 2000
+    priority                   = 500
     protocol                   = "Tcp"
     source_port_range          = "*"
     source_address_prefix      = "${chomp(data.http.myip.body)}/32"
@@ -88,14 +94,14 @@ resource "azurerm_network_security_group" "lerncloud" {
   security_rule {
     access                     = "Allow"
     direction                  = "Inbound"
-    name                       = "allucp"
-    priority                   = 2100
+    name                       = "alludp"
+    priority                   = 501
     protocol                   = "Udp"
     source_port_range          = "*"
     source_address_prefix      = "${chomp(data.http.myip.body)}/32"
     destination_port_range     = "22-65535"
     destination_address_prefix = "*"
-  }   
+  }  
 }
 
 resource "azurerm_network_interface_security_group_association" "lerncloud" {
