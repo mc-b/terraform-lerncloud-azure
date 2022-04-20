@@ -13,3 +13,8 @@ output "fqdn_vm" {
   description = "The FQDN of the server instance."
   
 }
+
+output "description" {
+  value = var.description 
+  description = "Description VM"
+}

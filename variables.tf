@@ -6,22 +6,71 @@ variable "location" {
   default = "West Europe"
 }
 
-# Public Variablen
+
+# Allgemeine Variablen
 
 variable "module" {
+    description = "Modulname: wird als Hostname verwendet"
     type    = string
     default = "base"
 }
 
-variable "userdata" {
-    description = "Cloud-init Script"
-    default = "/../../modules/base.yaml"
+variable "description" {
+  description = "Beschreibung VM"
+  type        = string
+  default     = "Beschreibung VM"  
+}
+
+variable "memory" {
+    description = "Memory in GB: bestimmt Instance in der Cloud"
+    type    = number
+    default = 2
+}
+
+variable "storage" {
+    description = "Groesse Disk"
+    type    = number
+    default = 32
+}
+
+variable "cores" {
+    description = "Anzahl CPUs"
+    type    = number
+    default = 1
 }
 
 variable "ports" {
+    description = "Ports welche in der Firewall geoeffnet sind"
     type    = list(number)
     default = [ 22, 80 ]
 }
+
+variable "userdata" {
+    description = "Cloud-init Script"
+    type    = string
+    default = "cloud-init.yaml"
+}
+
+# Zugriffs Informationen
+
+variable "url" {
+    description = "Evtl. URL fuer den Zugriff auf das API des Racks Servers"
+    type    = string
+}
+
+variable "key" {
+    description = "API Key, Token etc. fuer Zugriff"
+    type    = string
+    sensitive   = true
+}
+
+variable "vpn" {
+    description = "Optional VPN welches eingerichtet werden soll"
+    type    = string
+}
+
+###
+# Aufbereitung fuer Azure Cloud
 
 # Ports um "priority" Ergaenzen
 locals {
@@ -43,33 +92,17 @@ locals {
   ]
 }
 
-variable "mem" {
-    type    = string
-    default = "1GB"
-}
-
-# Umwandlung "mem" nach AWS Instance Type
+# Umwandlung "memory" nach Azure Instance Type
 
 variable "instance_type" {
   type = map
   default = {
-    "1GB" = "Standard_B1s"
-    "2GB" = "Standard_B1ms"
-    "4GB" = "Standard_B2s"
-    "8GB" = "Standard_B2ms"
-    "16GB" = "Standard_B4ms"
+    1 = "Standard_B1s"
+    2 = "Standard_B1ms"
+    4 = "Standard_B2s"
+    8 = "Standard_B2ms"
+    16 = "Standard_B4ms"
   }
-}
-
-# wird nicht ausgewertet - nur zu Kompatibilitaet zu Mulitpass
-variable "disk" {
-    type    = string
-    default = "32GB"
-}
-
-# wird nicht ausgewertet - nur zu Kompatibilitaet zu Mulitpass
-variable "cpu" {
-    default = 1
 }
 
 # Scripts

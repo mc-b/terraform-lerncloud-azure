@@ -115,7 +115,7 @@ resource "azurerm_linux_virtual_machine" "lerncloud" {
   name                              = var.module
   resource_group_name               = azurerm_resource_group.lerncloud.name
   location                          = azurerm_resource_group.lerncloud.location
-  size                              = lookup( var.instance_type, var.mem )
+  size                              = lookup( var.instance_type, var.memory )
   admin_username                    = "ubuntu"
   admin_password                    = "P@ssw0rd1234!"
   disable_password_authentication   = false  
