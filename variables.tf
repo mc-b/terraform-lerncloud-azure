@@ -1,6 +1,12 @@
 
 # Allgemeine Variablen
 
+
+variable "subscription_id" {
+  description = "Azure Subcription ID"
+  default     = ""
+}
+
 variable "machines" {
   type = map(object({
     hostname    = string

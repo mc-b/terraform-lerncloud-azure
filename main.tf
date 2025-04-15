@@ -57,16 +57,28 @@ resource "azurerm_network_security_group" "lerncloud" {
     }
   }
 
-  # Eigene IP erlauben
+  # Eigene IP erlauben (TCP)
   security_rule {
-    name                       = "allow-ssh-me"
+    name                       = "allow-all-tcp-me"
     priority                   = 500
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
     source_address_prefix      = "${chomp(data.http.myip.response_body)}/32"
-    destination_port_range     = "22"
+    destination_port_range     = "22-65535"
+    destination_address_prefix = "*"
+  }
+  # Eigene IP erlauben (UDP)
+  security_rule {
+    name                       = "allow-all-udp-me"
+    priority                   = 501
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Udp"
+    source_port_range          = "*"
+    source_address_prefix      = "${chomp(data.http.myip.response_body)}/32"
+    destination_port_range     = "22-65535"
     destination_address_prefix = "*"
   }
 }
@@ -120,9 +132,9 @@ resource "azurerm_linux_virtual_machine" "vms" {
   network_interface_ids           = [azurerm_network_interface.vms[each.key].id]
 
   source_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-noble"
-    sku       = "24_04-lts"
+    publisher = "canonical"
+    offer     = "ubuntu-24_04-lts"
+    sku       = "ubuntu-pro-gen1"
     version   = "latest"
   }
 
