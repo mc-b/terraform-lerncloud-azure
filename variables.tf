@@ -1,12 +1,6 @@
 
 # Allgemeine Variablen
 
-
-variable "subscription_id" {
-  description = "Azure Subcription ID"
-  default     = ""
-}
-
 variable "machines" {
   type = map(object({
     hostname    = string
@@ -18,12 +12,6 @@ variable "machines" {
 variable "location" {
   description = "The Azure Region in which all resources in this example should be created."
   default     = "West Europe"
-}
-
-variable "module" {
-  description = "Modulname: wird als Hostname verwendet"
-  type        = string
-  default     = "base"
 }
 
 variable "description" {
@@ -111,10 +99,14 @@ locals {
 variable "instance_type" {
   type = map(any)
   default = {
-    1  = "Standard_B1s"
-    2  = "Standard_B1ms"
-    4  = "Standard_B2s"
-    8  = "Standard_B2ms"
-    16 = "Standard_B4ms"
+    1    = "Standard_B1s"
+    2    = "Standard_B1ms"
+    4    = "Standard_B2s"
+    8    = "Standard_B2ms"
+    16   = "Standard_B4ms"
+    32   = "Standard_B8ms"
+    64   = "Standard_B12ms"
+    128  = "Standard_B16ms"
   }
 }
+

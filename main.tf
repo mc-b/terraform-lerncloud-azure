@@ -1,19 +1,19 @@
 # 1x Ressourcengruppe
 resource "azurerm_resource_group" "lerncloud" {
-  name     = var.module
+  name     = var.url
   location = var.location
 }
 
 # 1x Netzwerk + Subnet
 resource "azurerm_virtual_network" "lerncloud" {
-  name                = "${var.module}-network"
+  name                = "${var.url}-network"
   address_space       = ["10.0.0.0/16"]
   location            = var.location
   resource_group_name = azurerm_resource_group.lerncloud.name
 }
 
 resource "azurerm_subnet" "lerncloud" {
-  name                 = "${var.module}-subnet"
+  name                 = "${var.url}-subnet"
   virtual_network_name = azurerm_virtual_network.lerncloud.name
   resource_group_name  = azurerm_resource_group.lerncloud.name
   address_prefixes     = ["10.0.2.0/24"]
@@ -21,7 +21,7 @@ resource "azurerm_subnet" "lerncloud" {
 
 # 1x NSG für alle
 resource "azurerm_network_security_group" "lerncloud" {
-  name                = "${var.module}-nsg"
+  name                = "${var.url}-nsg"
   location            = var.location
   resource_group_name = azurerm_resource_group.lerncloud.name
 
