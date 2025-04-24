@@ -1,0 +1,4 @@
+site_name: terraform-lerncloud-azure
+docs_dir: .
+nav:
+- README: README.md
