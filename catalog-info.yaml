@@ -8,6 +8,7 @@ metadata:
   - terraform
   - lerncloud
   - opentofu  
+  - azure
   links:
   - url: https://github.com/mc-b/terraform-lerncloud-azure
     title: Repository
@@ -15,10 +16,10 @@ metadata:
   annotations:
     github.com/project-slug: mc-b/terraform-lerncloud-azure
     backstage.io/source-location: url:https://github.com/mc-b/terraform-lerncloud-azure
-    backstage.io/techdocs-ref: url:https://github.com/mc-b/terraform-lerncloud-azure
+    # backstage.io/techdocs-ref: url:https://github.com/mc-b/terraform-lerncloud-azure
 spec:
   type: infrastructure
   lifecycle: production
   owner: group:mc-b/mc-b
-  dependsOn:
-    - component:mc-b/lerncloud   
+  subcomponentOf: component:mc-b/terraform-provider-lerncloud
+
