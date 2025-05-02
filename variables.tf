@@ -102,6 +102,7 @@ variable "instance_type" {
     1    = "Standard_B1s"
     2    = "Standard_B1ms"
     4    = "Standard_B2s"
+    6    = "Standard_B2ms"
     8    = "Standard_B2ms"
     16   = "Standard_B4ms"
     32   = "Standard_B8ms"
